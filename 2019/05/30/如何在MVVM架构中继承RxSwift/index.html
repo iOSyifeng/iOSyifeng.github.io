@@ -79,13 +79,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="逸枫的哲学范儿">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="First steps为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始123456789//old codeprotocol CurrencyServiceProtocol : class &amp;#123;    func fetchConverter(_ completion: @escaping ((Result&amp;lt;Converter, ErrorResul">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在MVVM架构中继承RxSwift">
+<meta property="og:url" content="http://yoursite.com/2019/05/30/如何在MVVM架构中继承RxSwift/index.html">
 <meta property="og:site_name" content="逸枫的哲学范儿">
+<meta property="og:description" content="First steps为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始123456789//old codeprotocol CurrencyServiceProtocol : class &amp;#123;    func fetchConverter(_ completion: @escaping ((Result&amp;lt;Converter, ErrorResul">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-30T07:51:24.983Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="逸枫的哲学范儿">
+<meta name="twitter:title" content="如何在MVVM架构中继承RxSwift">
+<meta name="twitter:description" content="First steps为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始123456789//old codeprotocol CurrencyServiceProtocol : class &amp;#123;    func fetchConverter(_ completion: @escaping ((Result&amp;lt;Converter, ErrorResul">
 
 
 
@@ -115,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/30/如何在MVVM架构中继承RxSwift/">
 
 
 
 
 
-  <title>逸枫的哲学范儿</title>
+  <title>如何在MVVM架构中继承RxSwift | 逸枫的哲学范儿</title>
   
 
 
@@ -140,8 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,9 +217,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -246,9 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/30/如何在MVVM架构中继承RxSwift/" itemprop="url">如何在MVVM架构中继承RxSwift</a></h1>
+          <h1 class="post-title" itemprop="name headline">如何在MVVM架构中继承RxSwift</h1>
         
 
         <div class="post-meta">
@@ -298,9 +299,7 @@
       
 
       
-        
-          
-            <h1 id="First-steps"><a href="#First-steps" class="headerlink" title="First steps"></a>First steps</h1><p>为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//old code</span><br><span class="line">protocol CurrencyServiceProtocol : class &#123;</span><br><span class="line">    func fetchConverter(_ completion: @escaping ((Result&lt;Converter, ErrorResult&gt;) -&gt; Void))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//new code </span><br><span class="line">protocol CurrencyServiceObservable : class &#123;</span><br><span class="line">    func fetchConverter() -&gt; Observable&lt;Converter&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h1 id="First-steps"><a href="#First-steps" class="headerlink" title="First steps"></a>First steps</h1><p>为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//old code</span><br><span class="line">protocol CurrencyServiceProtocol : class &#123;</span><br><span class="line">    func fetchConverter(_ completion: @escaping ((Result&lt;Converter, ErrorResult&gt;) -&gt; Void))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//new code </span><br><span class="line">protocol CurrencyServiceObservable : class &#123;</span><br><span class="line">    func fetchConverter() -&gt; Observable&lt;Converter&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>首先,我定义了一个返回一个可观察序列的新的服务协议.注意,我已经将返回的参数从闭包的 <code>Result</code>更改为观察序列的<code>Converter</code>.RxSwift有它自己处理错误的方式,因此,<code>Result</code>状态不是必须的,我们先不管它.</p>
 <p>同样的变化应用于解析器</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// old code</span><br><span class="line">switch T.parseObject(dictionary: dictionary) &#123;</span><br><span class="line">    case .failure(let error):</span><br><span class="line">        completion(.failure(error))</span><br><span class="line">        break</span><br><span class="line">    case .success(let newModel):</span><br><span class="line">        completion(.success(newModel))</span><br><span class="line">        break</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// new code</span><br><span class="line">switch T.parseObject(dictionary: dictionary) &#123;</span><br><span class="line">    case .failure(let error):</span><br><span class="line">        return Observable.error(error)</span><br><span class="line">    case .success(let newModel):</span><br><span class="line">        return Observable.just(newModel)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -331,8 +330,6 @@
 <p>还有许多其他方法可以将RxSwift集成到您的体系结构中，我只介绍了一个简单的例子。无论使用什么代码方法和工具，都要始终记住您想要实现的目标，保持干净的代码易于测试和维护，并遵循清晰的逻辑和关注点分离。</p>
 <p>Thanks reading!</p>
 
-          
-        
       
     </div>
     
@@ -349,12 +346,12 @@
       
 
       
+      
+      
 
       
 
       
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -364,10 +361,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -375,6 +373,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -395,8 +397,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -438,6 +449,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#First-steps"><span class="nav-number">1.</span> <span class="nav-text">First steps</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ViewModel-and-RxSwift"><span class="nav-number">2.</span> <span class="nav-text">ViewModel and RxSwift</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#View-and-RxSwift"><span class="nav-number">3.</span> <span class="nav-text">View and RxSwift</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -571,6 +598,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
