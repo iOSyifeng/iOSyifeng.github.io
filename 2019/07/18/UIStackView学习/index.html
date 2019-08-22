@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="UIStackView官网译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UIStackView学习">
+<meta property="og:url" content="http://yoursite.com/2019/07/18/UIStackView学习/index.html">
+<meta property="og:site_name" content="逸枫的哲学范儿">
+<meta property="og:description" content="UIStackView官网译">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g53rbr1gmtj30f809uaab.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006y8mN6ly1g6889kskxqj30iu0ijmzm.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006y8mN6ly1g688cfq2r5j30k404ymxb.jpg">
+<meta property="og:image" content="http://ww3.sinaimg.cn/large/006y8mN6ly1g688d45ydbj30ke05g74b.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/006y8mN6ly1g688dv4pqjj30jb07bwer.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006y8mN6ly1g688en7pqaj30kj0i8gxt.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/006y8mN6ly1g688fskgxoj30kc0733ym.jpg">
+<meta property="og:updated_time" content="2019-08-22T09:35:30.695Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UIStackView学习">
+<meta name="twitter:description" content="UIStackView官网译">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/006tNc79ly1g53rbr1gmtj30f809uaab.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/18/UIStackView学习/">
+
+
+
+
+
+  <title>UIStackView学习 | 逸枫的哲学范儿</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">逸枫的哲学范儿</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/18/UIStackView学习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="逸枫">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="逸枫的哲学范儿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UIStackView学习</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-18T09:31:00+08:00">
+                2019-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>UIStackView官网译<br><a id="more"></a></p>
+<h2 id="UIStackView"><a href="#UIStackView" class="headerlink" title="UIStackView"></a>UIStackView</h2><p>用行或者列的方式布局视图集合的流线型接口</p>
+<h2 id="Declaration"><a href="#Declaration" class="headerlink" title="Declaration"></a>Declaration</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UIStackView</span>: <span class="title">UIView</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>Stack View 允许你利用自动布局的功能, 创建能够动态适应设备方向和可用空间的任何更改的用户界面. <code>stack view</code> 通过它的 <code>arrangedSubviews</code>属性管理者所有视图布局. 这些视图根据他们在<code>arranged Subviews</code>数组中的顺序沿着<code>stack view</code>的轴线排列. 确切的布局依赖于<code>stack view</code>的<code>axis,distribution,slignment,spacing</code>和其他属性</p>
+<p><img src="http://ww4.sinaimg.cn/large/006tNc79ly1g53rbr1gmtj30f809uaab.jpg" alt></p>
+<p>要使用一个<code>stack view</code>,打开一个你要编辑的故事版, 从对象库中拖出水平<code>stack view</code>或垂直<code>stack view</code>,并将<code>stack view</code>放到所需位置. 接下来,拖动<code>stack</code>的内容,将视图或者控件放入<code>stack</code>. 你也可以根据需要继续向<code>stack view</code>中添加视图和控件. 接口生成器会根据<code>stack view</code>的内容调整<code>stack view</code>的大小. 你也可以通过修改属性检查器中<code>stack view</code>的属性来调整<code>stack view</code>的外观</p>
+<blockquote>
+<p>Note</p>
+</blockquote>
+<blockquote>
+<p>你负责定义<code>stack view</code>的位置和大小(可选), 然后<code>stack view</code>管理其内容的布局和大小</p>
+</blockquote>
+<h2 id="Stack-View-and-Auto-Layout"><a href="#Stack-View-and-Auto-Layout" class="headerlink" title="Stack View and Auto Layout"></a>Stack View and Auto Layout</h2><p><code>stack view</code>使用自动布局来定位和调整其排列好的视图的大小。<code>stack view</code>将第一个和最后一个排列好的视图的边缘沿堆栈轴对齐。在水平堆栈中，这意味着第一个排列视图的前缘固定在堆栈的前缘上，最后一个排列视图的后缘固定在堆栈的后缘上。在垂直堆栈中，顶部和底部边缘分别固定在堆栈的顶部和底部边缘上。如果将<code>stack view</code>的isLayoutMarginsRelativeArrangement属性设置为true，则<code>stack view</code>将其内容固定在相关的边距上，而不是边缘。</p>
+<p>图2  <code>stack view</code></p>
+<p><img src="http://ww3.sinaimg.cn/large/006y8mN6ly1g6889kskxqj30iu0ijmzm.jpg" alt></p>
+<h2 id="Positioning-and-Sizing-the-Stack-View"><a href="#Positioning-and-Sizing-the-Stack-View" class="headerlink" title="Positioning and Sizing the Stack View"></a>Positioning and Sizing the Stack View</h2><p>尽管<code>stack view</code>允许您在不直接使用自动布局的情况下布局其内容，但仍然需要使用自动布局来定位<code>stack view</code>本身。通常，这意味着将<code>stack view</code>的至少两条相邻边缘固定在一起，以定义其位置。在没有附加约束的情况下，系统根据<code>stack view</code>的内容计算<code>stack view</code>的大小。</p>
+<ul>
+<li><p>沿着<code>stack view</code>的轴线，其拟合大小等于所有排列视图的大小加上视图之间的空间之和。</p>
+</li>
+<li><p>垂直于<code>stack view</code>的轴线，其拟合大小等于最大排列视图的大小。</p>
+</li>
+<li><p>如果<code>stack view</code>的isLayoutMarginsRelativeArrangement属性设置为true，则<code>stack view</code>的合适大小将增加，以包含空白。</p>
+</li>
+</ul>
+<p>您可以提供额外的约束来指定<code>stack view</code>的高度、宽度或两者兼备。在这些情况下，<code>stack view</code>调整其已安排视图的布局和大小，以填充指定区域。确切的布局取决于<code>stack view</code>的属性。看到UIStackView。分布和UIStackView。有关<code>stack view</code>如何处理其内容有额外空间或空间不足的完整描述的对齐枚举。</p>
+<p>您还可以基于<code>stack view</code>的第一个或最后一个基线来定位<code>stack view</code>，而不是使用顶部、底部或中心Y位置。与<code>stack view</code>的拟合大小一样，这些基线是根据<code>stack view</code>的内容计算的。</p>
+<ul>
+<li><p>水平<code>stack view</code>返回forFirstBaselineLayout和forLastBaselineLayout方法的最高视图。如果最高的视图也是<code>stack view</code>，它将返回在嵌套<code>stack view</code>上调用forFirstBaselineLayout或forLastBaselineLayout的结果。</p>
+</li>
+<li><p>垂直<code>stack view</code>为forFirstBaselineLayout返回其第一个已安排的视图，为forLastBaselineLayout返回其最后一个已安排的视图。如果其中一个视图也是<code>stack view</code>，那么它将返回在嵌套<code>stack view</code>上调用forFirstBaselineLayout或forLastBaselineLayout的结果。</p>
+</li>
+</ul>
+<blockquote>
+<p>请注意<br>基线对齐只适用于高度与其内部内容大小高度匹配的视图。如果视图被拉伸或压缩，基线将出现在错误的位置。</p>
+</blockquote>
+<h2 id="Common-Stack-View-Layouts"><a href="#Common-Stack-View-Layouts" class="headerlink" title="Common Stack View Layouts"></a>Common Stack View Layouts</h2><p>下面是使用<code>stack view</code>布局内容的一些常见方法。</p>
+<p>只定义位置。您可以通过将<code>stack view</code>的两条相邻边固定在其父视图上来定义<code>stack view</code>的位置。在本例中，<code>stack view</code>的大小根据其排列的视图在两个维度上自由增长。当您希望<code>stack view</code>的内容以其固有的内容大小显示，并且希望安排与<code>stack view</code>相关的其他用户界面元素时，这种方法特别有用。</p>
+<p>图3显示了一个stack视图，它的前边和顶边固定在它的父视图上。标签是第一个基线对齐的，它们之间有一个8点的空间，在<code>stack view</code>的父视图中向左对齐<code>stack view</code>的内容。</p>
+<p>图3 定义的位置</p>
+<p><img src="http://ww3.sinaimg.cn/large/006y8mN6ly1g688cfq2r5j30k404ymxb.jpg" alt></p>
+<p>沿着堆栈的轴线定义堆栈的大小。在本例中，将堆栈的两条边沿着它的轴固定到它的父视图上，在该维度中定义<code>stack view</code>的大小。您还需要固定另一条边来定义<code>stack view</code>的位置。<code>stack view</code>的大小及其内容沿其轴的位置来填充所定义的空间;然而，未固定的边缘根据最大排列视图的大小自由移动。</p>
+<p>图4显示了一个<code>stack view</code>，它的父视图固定了前边、顶边和尾边。使用填充分布会导致内容调整大小以填充视图的宽度，而且由于文本字段的内容拥抱优先级低于标签，因此可以根据需要对其进行拉伸。</p>
+<p>图4 沿着<code>stack view</code>的轴线定义大小</p>
+<p><img src="http://ww3.sinaimg.cn/large/006y8mN6ly1g688d45ydbj30ke05g74b.jpg" alt></p>
+<p>定义堆栈垂直于其轴线的大小。这种方法类似于前面的示例，但是您要将垂直于<code>stack view</code>轴线的两条边固定在一起，并且只沿着轴线固定一条边。这允许<code>stack view</code>在添加和删除已安排的视图时沿着其轴增长和收缩。除非使用fillEqually分发，否则所安排的视图的大小将根据其内部内容大小确定。垂直于轴，视图根据<code>stack view</code>的对齐方式布置在定义的空间中。</p>
+<p>图5显示了一个包含四个标签和一个按钮的垂直堆栈。堆栈使用8.0点间距和中心对齐。<code>stack view</code>的高度将随着项的添加或从堆栈中删除而增长和收缩。</p>
+<p>图5 定义垂直于<code>stack view</code>轴线的大小</p>
+<p><img src="http://ww2.sinaimg.cn/large/006y8mN6ly1g688dv4pqjj30jb07bwer.jpg" alt></p>
+<p>定义<code>stack view</code>的大小和位置。在本例中，将<code>stack view</code>的所有四条边都钉住，使<code>stack view</code>在提供的空间中显示其内容。</p>
+<p>图6显示了一个垂直<code>stack view</code>，所有四条边都固定在它的父视图上。通过使用中心对齐和填充分布，<code>stack view</code>确保其内容水平居中，垂直填充屏幕。然而，使用这种方法获得所需的布局需要几个额外的步骤。默认情况下，<code>stack view</code>垂直拉伸标签，而不是图像视图。要调整图像视图的大小，请将其内容拥抱优先级降低到标签的内容拥抱优先级以下。此外，要在图像视图调整大小时维护其长宽比，请将其模式设置为aspect Fit。在图像视图和<code>stack view</code>之间添加等宽约束有助于确保图像的大小能够填充可用空间。</p>
+<p>图6 定义大小和位置</p>
+<p><img src="http://ww1.sinaimg.cn/large/006y8mN6ly1g688en7pqaj30kj0i8gxt.jpg" alt></p>
+<h2 id="Managing-the-Stack-View’s-Appearance"><a href="#Managing-the-Stack-View’s-Appearance" class="headerlink" title="Managing the Stack View’s Appearance"></a>Managing the Stack View’s Appearance</h2><p>UIStackView是UIView的一个非呈现子类;也就是说，它不提供自己的任何用户界面。相反，它只管理其已安排视图的位置和大小。因此，有些属性(如backgroundColor)对<code>stack view</code>没有影响。类似地，您不能覆盖layerClass、draw(<em>:)或draw(</em>:in:)。</p>
+<p>有许多属性定义<code>stack view</code>如何布局其内容。</p>
+<ul>
+<li><p>axis属性决定堆栈的垂直或水平方向。</p>
+</li>
+<li><p>distribution 属性决定了已排列视图沿堆栈轴线的布局。</p>
+</li>
+<li><p>alignment属性确定垂直于堆栈轴线的已排列视图的布局。</p>
+</li>
+<li><p>spacing 属性确定排列视图之间的最小间距。</p>
+</li>
+<li><p>isbaselinerativearrangement属性决定视图之间的垂直间距是否从基线测量。</p>
+</li>
+<li><p>isLayoutMarginsRelativeArrangement属性确定<code>stack view</code>是否将其排列好的视图相对于其布局边距进行布局。</p>
+</li>
+</ul>
+<p>通常，您使用一个<code>stack view</code>来列出少量项。您可以通过将<code>stack view</code>嵌套到其他<code>stack view</code>中来构建更复杂的视图层次结构。例如，图7显示了一个包含两个水平<code>stack view</code>的垂直<code>stack view</code>。每个水平<code>stack view</code>都包含一个标签和一个文本字段。</p>
+<p>图7 嵌套<code>stack view</code></p>
+<p><img src="http://ww1.sinaimg.cn/large/006y8mN6ly1g688fskgxoj30kc0733ym.jpg" alt></p>
+<p>您还可以通过向已安排视图添加附加约束来微调已安排视图的外观。例如，可以使用约束设置视图的最小或最大高度或宽度。或者可以为视图定义纵横比。<code>stack view</code>在布局其内容时使用这些约束。例如，在图像视图中有一个长宽比约束，该约束在图像调整大小时强制一个恒定的长宽比。</p>
+<blockquote>
+<p>请注意<br>在向<code>stack view</code>内的视图添加约束时，要小心避免引入冲突。一般来说，如果视图的大小默认为给定维度的内部内容大小，则可以安全地为该维度添加约束。</p>
+</blockquote>
+<h2 id="Maintaining-Consistency-Between-the-Arranged-Views-and-Subviews"><a href="#Maintaining-Consistency-Between-the-Arranged-Views-and-Subviews" class="headerlink" title="Maintaining Consistency Between the Arranged Views and Subviews"></a>Maintaining Consistency Between the Arranged Views and Subviews</h2><p>stack视图确保它的arrangedSubviews属性始终是它的subviews属性的子集。具体来说，<code>stack view</code>执行以下规则:</p>
+<ul>
+<li><p>当<code>stack view</code>将视图添加到它的arrangedSubviews数组中时，它还将该视图作为子视图添加(如果还没有添加的话)。</p>
+</li>
+<li><p>当从<code>stack view</code>中删除子视图时，<code>stack view</code>也将它从arrangedSubviews数组中删除。</p>
+</li>
+<li><p>从arrangedSubviews数组中删除视图并不会将其作为子视图删除。<code>stack view</code>不再管理视图的大小和位置，但视图仍然是视图层次结构的一部分，如果它是可见的，则在屏幕上呈现。</p>
+</li>
+</ul>
+<p>尽管arrangedSubviews数组始终包含子视图数组的子集，但这些数组的顺序仍然是独立的。</p>
+<ul>
+<li><p>arrangedSubviews数组的顺序定义了视图在堆栈中出现的顺序。对于水平堆栈，视图按读取顺序排列，较低的索引视图出现在较高索引视图之前。例如，在英语中，视图按从左到右的顺序排列。对于垂直堆栈，视图是从上到下排列的，索引视图越低，索引视图越高。</p>
+</li>
+<li><p>子视图数组的顺序定义子视图的z顺序。如果视图重叠，索引较低的子视图将出现在索引较高的子视图后面。</p>
+</li>
+</ul>
+<h2 id="Dynamically-Changing-the-Stack-View’s-Content"><a href="#Dynamically-Changing-the-Stack-View’s-Content" class="headerlink" title="Dynamically Changing the Stack View’s Content"></a>Dynamically Changing the Stack View’s Content</h2><p>每当视图被添加、删除或插入到arrangedSubviews数组中，或者当其中一个已安排的子视图的isHidden属性发生更改时，<code>stack view</code>自动更新其布局。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// Appears to remove the first arranged view from the stack.</span><br><span class="line">// The view is still inside the stack, it&apos;s just no longer visible, and no longer contributes to the layout.</span><br><span class="line">let firstView = stackView.arrangedSubviews[0]</span><br><span class="line">firstView.isHidden = true</span><br></pre></td></tr></table></figure>
+<p><code>stack view</code>还自动响应对其任何属性的更改。例如，可以通过更新<code>stack view</code>的axis属性动态更改堆栈的方向。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// Toggle between a vertical and horizontal stack</span><br><span class="line">if stackView.axis == .Horizontal &#123;</span><br><span class="line">stackView.axis = .Vertical</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">stackView.axis = .Horizontal</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>您可以将对已安排子视图的isHidden属性的更改和对<code>stack view</code>的属性的更改设置为动画，方法是将这些更改放置在动画块中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// Animates removing the first item in the stack.</span><br><span class="line">UIView.animateWithDuration(0.25) &#123; () -&gt; Void in</span><br><span class="line">let firstView = stackView.arrangedSubviews[0]</span><br><span class="line">firstView.isHidden = true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，您可以在Interface Builder中直接为<code>stack view</code>的许多属性定义特定于大小类的值。每当<code>stack view</code>的size类发生更改时，系统自动激活这些更改。</p>
+<p>Topics</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">## Initializing a Stack View</span><br><span class="line"></span><br><span class="line">init(arrangedSubviews: [UIView])</span><br><span class="line">Returns a new stack view object that manages the provided views.</span><br><span class="line"></span><br><span class="line">init(frame: CGRect)</span><br><span class="line"></span><br><span class="line">init(coder: NSCoder)</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">## Managing Arranged Subviews</span><br><span class="line"></span><br><span class="line">func addArrangedSubview(UIView)</span><br><span class="line">Adds a view to the end of the </span><br><span class="line">arrangedSubviews</span><br><span class="line">array.</span><br><span class="line"></span><br><span class="line">var arrangedSubviews: [UIView]</span><br><span class="line">The list of views arranged by the stack view.</span><br><span class="line"></span><br><span class="line">func insertArrangedSubview(UIView, at: Int)</span><br><span class="line">Adds the provided view to the array of arranged subviews at the specified index.</span><br><span class="line"></span><br><span class="line">func removeArrangedSubview(UIView)</span><br><span class="line">Removes the provided view from the stack’s array of arranged subviews.</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">## Configuring The Layout</span><br><span class="line"></span><br><span class="line">var alignment: UIStackView.Alignment</span><br><span class="line">The alignment of the arranged subviews perpendicular to the stack view’s axis.</span><br><span class="line"></span><br><span class="line">var axis: NSLayoutConstraint.Axis</span><br><span class="line">The axis along which the arranged views are laid out.</span><br><span class="line"></span><br><span class="line">var isBaselineRelativeArrangement: Bool</span><br><span class="line">A Boolean value that determines whether the vertical spacing between views is measured from their baselines.</span><br><span class="line"></span><br><span class="line">var distribution: UIStackView.Distribution</span><br><span class="line">The distribution of the arranged views along the stack view’s axis.</span><br><span class="line"></span><br><span class="line">var isLayoutMarginsRelativeArrangement: Bool</span><br><span class="line">A Boolean value that determines whether the stack view lays out its arranged views relative to its layout margins.</span><br><span class="line"></span><br><span class="line">var spacing: CGFloat</span><br><span class="line">The distance in points between the adjacent edges of the stack view’s arranged views.</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">## Adding Space Between Items</span><br><span class="line"></span><br><span class="line">func customSpacing(after: UIView) -&gt; CGFloat</span><br><span class="line">Returns the custom spacing after the specified view.</span><br><span class="line"></span><br><span class="line">func setCustomSpacing(CGFloat, after: UIView)</span><br><span class="line">Applies custom spacing after the specified view.</span><br><span class="line"></span><br><span class="line">class let spacingUseDefault: CGFloat</span><br><span class="line">The default spacing for subviews within a stack view.</span><br><span class="line"></span><br><span class="line">class let spacingUseSystem: CGFloat</span><br><span class="line">The system-defined spacing to the neighboring view.</span><br><span class="line">----------------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">## Constants</span><br><span class="line"></span><br><span class="line">enum UIStackView.Distribution</span><br><span class="line">The layout that defines the size and position of the arranged views along the stack view’s axis.</span><br><span class="line"></span><br><span class="line">enum UIStackView.Alignment</span><br><span class="line">The layout of arranged views perpendicular to the stack view’s axis.</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/18/面向协议编程/" rel="next" title="面向协议编程">
+                <i class="fa fa-chevron-left"></i> 面向协议编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">逸枫</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UIStackView"><span class="nav-number">1.</span> <span class="nav-text">UIStackView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Declaration"><span class="nav-number">2.</span> <span class="nav-text">Declaration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overview"><span class="nav-number">3.</span> <span class="nav-text">Overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stack-View-and-Auto-Layout"><span class="nav-number">4.</span> <span class="nav-text">Stack View and Auto Layout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Positioning-and-Sizing-the-Stack-View"><span class="nav-number">5.</span> <span class="nav-text">Positioning and Sizing the Stack View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Common-Stack-View-Layouts"><span class="nav-number">6.</span> <span class="nav-text">Common Stack View Layouts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-the-Stack-View’s-Appearance"><span class="nav-number">7.</span> <span class="nav-text">Managing the Stack View’s Appearance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Maintaining-Consistency-Between-the-Arranged-Views-and-Subviews"><span class="nav-number">8.</span> <span class="nav-text">Maintaining Consistency Between the Arranged Views and Subviews</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dynamically-Changing-the-Stack-View’s-Content"><span class="nav-number">9.</span> <span class="nav-text">Dynamically Changing the Stack View’s Content</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">逸枫</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
