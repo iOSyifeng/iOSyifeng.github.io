@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="MVVM与RxSwift系列(一)">
+<meta name="description" content="First steps为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始123456789//old codeprotocol CurrencyServiceProtocol : class &amp;#123;    func fetchConverter(_ completion: @escaping ((Result&amp;lt;Converter, ErrorResul">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在MVVM架构中继承RxSwift">
 <meta property="og:url" content="http://yoursite.com/2019/05/30/如何在MVVM架构中继承RxSwift/index.html">
 <meta property="og:site_name" content="逸枫的哲学范儿">
-<meta property="og:description" content="MVVM与RxSwift系列(一)">
+<meta property="og:description" content="First steps为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始123456789//old codeprotocol CurrencyServiceProtocol : class &amp;#123;    func fetchConverter(_ completion: @escaping ((Result&amp;lt;Converter, ErrorResul">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-30T10:01:09.217Z">
+<meta property="og:updated_time" content="2019-10-14T03:12:37.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在MVVM架构中继承RxSwift">
-<meta name="twitter:description" content="MVVM与RxSwift系列(一)">
+<meta name="twitter:description" content="First steps为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始123456789//old codeprotocol CurrencyServiceProtocol : class &amp;#123;    func fetchConverter(_ completion: @escaping ((Result&amp;lt;Converter, ErrorResul">
 
 
 
@@ -299,8 +299,8 @@
       
 
       
-        <p>MVVM与RxSwift系列(一)<br><a id="more"></a></p>
-<h1 id="First-steps"><a href="#First-steps" class="headerlink" title="First steps"></a>First steps</h1><p>为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//old code</span><br><span class="line">protocol CurrencyServiceProtocol : class &#123;</span><br><span class="line">    func fetchConverter(_ completion: @escaping ((Result&lt;Converter, ErrorResult&gt;) -&gt; Void))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//new code </span><br><span class="line">protocol CurrencyServiceObservable : class &#123;</span><br><span class="line">    func fetchConverter() -&gt; Observable&lt;Converter&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h1 id="First-steps"><a href="#First-steps" class="headerlink" title="First steps"></a>First steps</h1><p>为了能尽可能轻松的迁移代码,我将一步一步的更新每一个文件,首先从定义我的服务协议开始<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//old code</span><br><span class="line">protocol CurrencyServiceProtocol : class &#123;</span><br><span class="line">    func fetchConverter(_ completion: @escaping ((Result&lt;Converter, ErrorResult&gt;) -&gt; Void))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//new code </span><br><span class="line">protocol CurrencyServiceObservable : class &#123;</span><br><span class="line">    func fetchConverter() -&gt; Observable&lt;Converter&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <p>首先,我定义了一个返回一个可观察序列的新的服务协议.注意,我已经将返回的参数从闭包的 <code>Result</code>更改为观察序列的<code>Converter</code>.RxSwift有它自己处理错误的方式,因此,<code>Result</code>状态不是必须的,我们先不管它.</p>
 <p>同样的变化应用于解析器</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// old code</span><br><span class="line">switch T.parseObject(dictionary: dictionary) &#123;</span><br><span class="line">    case .failure(let error):</span><br><span class="line">        completion(.failure(error))</span><br><span class="line">        break</span><br><span class="line">    case .success(let newModel):</span><br><span class="line">        completion(.success(newModel))</span><br><span class="line">        break</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// new code</span><br><span class="line">switch T.parseObject(dictionary: dictionary) &#123;</span><br><span class="line">    case .failure(let error):</span><br><span class="line">        return Observable.error(error)</span><br><span class="line">    case .success(let newModel):</span><br><span class="line">        return Observable.just(newModel)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -439,7 +439,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="泛型是 Swift 中最强大的特性之一">
+<meta name="description" content="泛型是 Swift 中最强大的特性之一，大量的 Swift 标准库使用了泛型编码。例如， Swift 的数组和字典都是泛型集合。你可以创建一个存有整型值或者字符串值的数组，有必要的话，还可以创建一个任何 Swift 支持类型的数组。类似的，你也可以创建一个字典用于存储任意指定类型的值。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="泛型杂谈">
 <meta property="og:url" content="http://yoursite.com/2019/06/05/泛型杂谈/index.html">
 <meta property="og:site_name" content="逸枫的哲学范儿">
-<meta property="og:description" content="泛型是 Swift 中最强大的特性之一">
+<meta property="og:description" content="泛型是 Swift 中最强大的特性之一，大量的 Swift 标准库使用了泛型编码。例如， Swift 的数组和字典都是泛型集合。你可以创建一个存有整型值或者字符串值的数组，有必要的话，还可以创建一个任何 Swift 支持类型的数组。类似的，你也可以创建一个字典用于存储任意指定类型的值。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T06:26:10.109Z">
+<meta property="og:updated_time" content="2019-10-14T03:11:35.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="泛型杂谈">
-<meta name="twitter:description" content="泛型是 Swift 中最强大的特性之一">
+<meta name="twitter:description" content="泛型是 Swift 中最强大的特性之一，大量的 Swift 标准库使用了泛型编码。例如， Swift 的数组和字典都是泛型集合。你可以创建一个存有整型值或者字符串值的数组，有必要的话，还可以创建一个任何 Swift 支持类型的数组。类似的，你也可以创建一个字典用于存储任意指定类型的值。">
 
 
 
@@ -299,8 +299,8 @@
       
 
       
-        <p>泛型是 Swift 中最强大的特性之一<br><a id="more"></a></p>
-<p>泛型是 Swift 中最强大的特性之一，大量的 Swift 标准库使用了泛型编码。例如， Swift 的数组和字典都是泛型集合。你可以创建一个存有整型值或者字符串值的数组，有必要的话，还可以创建一个任何 Swift 支持类型的数组。类似的，你也可以创建一个字典用于存储任意指定类型的值。</p>
+        <p>泛型是 Swift 中最强大的特性之一，大量的 Swift 标准库使用了泛型编码。例如， Swift 的数组和字典都是泛型集合。你可以创建一个存有整型值或者字符串值的数组，有必要的话，还可以创建一个任何 Swift 支持类型的数组。类似的，你也可以创建一个字典用于存储任意指定类型的值。</p>
+<a id="more"></a>
 <p>我们先来写一个Swift方法判断一个字符串数组中是否存在特定字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">func existsManual(item:String, inArray:[String]) -&gt; Bool</span><br><span class="line">&#123;</span><br><span class="line">    var index:Int = 0   </span><br><span class="line">    var found = false</span><br><span class="line"></span><br><span class="line">    while (index &lt; inArray.count &amp;&amp; found == false)</span><br><span class="line">    &#123;</span><br><span class="line">        if item == inArray[index]</span><br><span class="line">        &#123;</span><br><span class="line">            found = true</span><br><span class="line">        &#125;</span><br><span class="line">        else</span><br><span class="line">        &#123;</span><br><span class="line">            index = index + 1</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if found</span><br><span class="line">    &#123;</span><br><span class="line">        return true</span><br><span class="line">    &#125;</span><br><span class="line">    else</span><br><span class="line">    &#123;</span><br><span class="line">        return false</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>当我们调用我们的方法时,可以得到结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let strings = [&quot;Ishmael&quot;, &quot;Jacob&quot;, &quot;Ezekiel&quot;]</span><br><span class="line"></span><br><span class="line">let nameExistsInArray = existsManual(item: &quot;Ishmael&quot;, inArray: strings)</span><br><span class="line">// returns true</span><br><span class="line"></span><br><span class="line">let nameExistsInArray1 = existsManual(item: &quot;Bubba&quot;, inArray: strings)</span><br><span class="line">// returns false</span><br></pre></td></tr></table></figure></p>
 <p>貌似我们已经完成了我们想要的效果,但是如果是让你搜索<code>Int</code> ,  <code>Double</code> 等的数组呢,难道我们还要针对每个类型都写一遍基本无差别的函数么,遵循DRY(Dont’t repeat yourself)原则,我们可以用泛型来解决此类问题.下面我先给出泛型写法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">func exits&lt;T: Equatable&gt;(item: T, inArray: [T]) -&gt; Bool &#123;</span><br><span class="line">    var index = 0</span><br><span class="line">    var found = false</span><br><span class="line"></span><br><span class="line">    while index &lt; inArray.count &amp;&amp; found == false &#123;</span><br><span class="line">    if item == inArray[index]</span><br><span class="line">    &#123;</span><br><span class="line">        found = true</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        index = index + 1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    if found &#123;</span><br><span class="line">        return true</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        return false</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -360,8 +360,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/18/面向协议编程/" rel="prev" title="面向协议编程">
-                面向协议编程 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/18/UIStackView学习/" rel="prev" title="UIStackView学习">
+                UIStackView学习 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -439,7 +439,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

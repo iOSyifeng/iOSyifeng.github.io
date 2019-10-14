@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="数组和链表Three Sum (求三树之和)给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面向协议编程">
-<meta property="og:url" content="http://yoursite.com/2019/06/18/面向协议编程/index.html">
+<meta property="og:title" content="leetCode日常刷题">
+<meta property="og:url" content="http://yoursite.com/2019/10/11/leetCode日常刷题/index.html">
 <meta property="og:site_name" content="逸枫的哲学范儿">
+<meta property="og:description" content="数组和链表Three Sum (求三树之和)给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-18T07:25:23.386Z">
+<meta property="og:updated_time" content="2019-10-11T05:37:45.152Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="面向协议编程">
+<meta name="twitter:title" content="leetCode日常刷题">
+<meta name="twitter:description" content="数组和链表Three Sum (求三树之和)给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。">
 
 
 
@@ -116,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/06/18/面向协议编程/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/11/leetCode日常刷题/">
 
 
 
 
 
-  <title>面向协议编程 | 逸枫的哲学范儿</title>
+  <title>leetCode日常刷题 | 逸枫的哲学范儿</title>
   
 
 
@@ -229,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/18/面向协议编程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/11/leetCode日常刷题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="逸枫">
@@ -246,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">面向协议编程</h1>
+          <h1 class="post-title" itemprop="name headline">leetCode日常刷题</h1>
         
 
         <div class="post-meta">
@@ -258,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-18T14:18:11+08:00">
-                2019-06-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-11T11:37:01+08:00">
+                2019-10-11
               </time>
             
 
@@ -296,7 +299,13 @@
       
 
       
-        
+        <h2 id="数组和链表"><a href="#数组和链表" class="headerlink" title="数组和链表"></a>数组和链表</h2><p>Three Sum (求三树之和)<br>给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。</p>
+<a id="more"></a>
+<p>注意：答案中不可以包含重复的三元组。</p>
+<p>例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，</p>
+<p>满足要求的三元组集合为：<br>[<br>  [-1, 0, 1],<br>  [-1, -1, 2]<br>]</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">func threeSum(_ nums: [Int]) -&gt; [[Int]] &#123;</span><br><span class="line">    if nums.count == 0 &#123;</span><br><span class="line">        return []</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    let nums = nums.sorted &#123; (a, b) -&gt; Bool in</span><br><span class="line">        return a &lt; b</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    let len = nums.count</span><br><span class="line">    var array = [[Int]]()</span><br><span class="line"></span><br><span class="line">    for i in 0..&lt;len &#123;</span><br><span class="line">        if i &gt; 0 &amp;&amp; nums[i] == nums[i-1] &#123;</span><br><span class="line">            continue</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        var left = i+1</span><br><span class="line">        var right = len-1</span><br><span class="line"></span><br><span class="line">        while left &lt; right &#123;</span><br><span class="line">            let tem = nums[i] + nums[left] + nums[right]</span><br><span class="line"></span><br><span class="line">            if tem == 0 &#123;</span><br><span class="line">                array.append([nums[i], nums[left], nums[right]])</span><br><span class="line"></span><br><span class="line">                while left &lt; right &amp;&amp; nums[left] == nums[left+1] &#123;</span><br><span class="line">                    left = left+1</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                while left &lt; right &amp;&amp; nums[right] == nums[right-1] &#123;</span><br><span class="line">                    right = right-1</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                left = left+1</span><br><span class="line">                right = right - 1</span><br><span class="line">            &#125; else if tem &gt; 0 &#123;</span><br><span class="line">                right = right - 1</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                left = left + 1</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return array</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let nums = [-1, 0, 1, 2, -1, -4]</span><br><span class="line"></span><br><span class="line">print(threeSum(nums))</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -320,8 +329,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/05/泛型杂谈/" rel="next" title="泛型杂谈">
-                <i class="fa fa-chevron-left"></i> 泛型杂谈
+              <a href="/2019/09/12/App启动优化/" rel="next" title="App启动优化">
+                <i class="fa fa-chevron-left"></i> App启动优化
               </a>
             
           </div>
@@ -330,8 +339,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/07/18/UIStackView学习/" rel="prev" title="UIStackView学习">
-                UIStackView学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/10/14/React之diff算法探究/" rel="prev" title="React之diff算法探究">
+                React之diff算法探究 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -384,8 +393,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -400,7 +418,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -427,6 +445,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数组和链表"><span class="nav-number">1.</span> <span class="nav-text">数组和链表</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

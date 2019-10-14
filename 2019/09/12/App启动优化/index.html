@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="App启动速度优化">
+<meta name="description" content="App启动时都干了些什么事儿?一般情况下,  App的启动分为冷启动和热启动。  冷启动是指, App点击启动前, 它的进程不在系统里, 需要系统新创建一个进程给他启动的情况, 这是一次完整的启动流程。  热启动是指, App在冷启动后将App退后台, 在 App 的进程还在系统里的情况下, 用户重新启动进入 App 的过程, 这个过程做的事情非常少。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="App启动优化">
 <meta property="og:url" content="http://yoursite.com/2019/09/12/App启动优化/index.html">
 <meta property="og:site_name" content="逸枫的哲学范儿">
-<meta property="og:description" content="App启动速度优化">
+<meta property="og:description" content="App启动时都干了些什么事儿?一般情况下,  App的启动分为冷启动和热启动。  冷启动是指, App点击启动前, 它的进程不在系统里, 需要系统新创建一个进程给他启动的情况, 这是一次完整的启动流程。  热启动是指, App在冷启动后将App退后台, 在 App 的进程还在系统里的情况下, 用户重新启动进入 App 的过程, 这个过程做的事情非常少。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-12T06:59:21.852Z">
+<meta property="og:updated_time" content="2019-10-14T03:12:36.664Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="App启动优化">
-<meta name="twitter:description" content="App启动速度优化">
+<meta name="twitter:description" content="App启动时都干了些什么事儿?一般情况下,  App的启动分为冷启动和热启动。  冷启动是指, App点击启动前, 它的进程不在系统里, 需要系统新创建一个进程给他启动的情况, 这是一次完整的启动流程。  热启动是指, App在冷启动后将App退后台, 在 App 的进程还在系统里的情况下, 用户重新启动进入 App 的过程, 这个过程做的事情非常少。">
 
 
 
@@ -299,14 +299,14 @@
       
 
       
-        <p>App启动速度优化<br><a id="more"></a></p>
-<h2 id="App启动时都干了些什么事儿"><a href="#App启动时都干了些什么事儿" class="headerlink" title="App启动时都干了些什么事儿?"></a>App启动时都干了些什么事儿?</h2><p>一般情况下,  App的启动分为冷启动和热启动。</p>
+        <h2 id="App启动时都干了些什么事儿"><a href="#App启动时都干了些什么事儿" class="headerlink" title="App启动时都干了些什么事儿?"></a>App启动时都干了些什么事儿?</h2><p>一般情况下,  App的启动分为冷启动和热启动。</p>
 <ul>
 <li><p>冷启动是指, App点击启动前, 它的进程不在系统里, 需要系统新创建一个进程给他启动的情况, 这是一次完整的启动流程。</p>
 </li>
 <li><p>热启动是指, App在冷启动后将App退后台, 在 App 的进程还在系统里的情况下, 用户重新启动进入 App 的过程, 这个过程做的事情非常少。</p>
 </li>
 </ul>
+<a id="more"></a>
 <p>所以, 主要 App 的启动优化是指的冷启动的优化。</p>
 <p>用户能感知到的启动慢, 其实都发生在主线程上。而主线程慢的原因有很多, 比如在主线程上执行了大文件读写操作, 在渲染周期中执行了大量计算等。但是, 有时你会发现即使你把首屏显示之前的这些主线程耗时问题都解决了, 还是比竞品启动的慢。</p>
 <p>那么, <strong>究竟如何才能把启动时的所有耗时都找出来呢? 解决这个问题, 你首先需要弄清楚 App 在启动时都干了哪些事儿。</strong></p>
@@ -401,6 +401,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/10/11/leetCode日常刷题/" rel="prev" title="leetCode日常刷题">
+                leetCode日常刷题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -476,7 +480,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
