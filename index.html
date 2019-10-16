@@ -229,6 +229,166 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/16/Runtime知识点回顾/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="逸枫">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="逸枫的哲学范儿">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/10/16/Runtime知识点回顾/" itemprop="url">Runtime知识点回顾</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-16T16:19:44+08:00">
+                2019-10-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Runtime-消息转发机制"><a href="#Runtime-消息转发机制" class="headerlink" title="Runtime 消息转发机制"></a>Runtime 消息转发机制</h2><ul>
+<li>动态方法解析</li>
+<li>备用接收者</li>
+<li>完整消息转发</li>
+</ul>
+<p><img src="https://tva1.sinaimg.cn/large/006y8mN6ly1g8047t1nn3j310s0ke40m.jpg" alt></p>
+<h3 id="动态方法解析"><a href="#动态方法解析" class="headerlink" title="动态方法解析"></a>动态方法解析</h3><p>首先, Objective-C 运行时会调用 <code>+resolveInstanceMethod:</code> 或者 <code>+resolveClassMethod:</code> 让你有机会提供一个函数实现. 如果你添加了函数并返回YES,那么运行时系统会重新启动一次消息发送的过程.</p>
+<p>实现一个动态方法解析的例子如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">    //执行foo函数</span><br><span class="line">    [self performSelector:@selector(foo:)];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel &#123;</span><br><span class="line">    if (sel == @selector(foo:)) &#123;//如果是执行foo函数，就动态解析，指定新的IMP</span><br><span class="line">        class_addMethod([self class], sel, (IMP)fooMethod, &quot;v@:&quot;);</span><br><span class="line">        return YES;</span><br><span class="line">    &#125;</span><br><span class="line">    return [super resolveInstanceMethod:sel];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void fooMethod(id obj, SEL _cmd) &#123;</span><br><span class="line">    NSLog(@&quot;Doing foo&quot;);//新的foo函数</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这是第一步,如果 resolve 方法返回NO, 运行时就会移到下一步: <code>forwardingTargetForSelector</code>.</p>
+<h3 id="备用接收者"><a href="#备用接收者" class="headerlink" title="备用接收者"></a>备用接收者</h3><p>如果目标对象实现了 <code>-forwardingTargetForSelect:</code>, Runtime 就会调用这个方法, 给你把这个消息转发给其他对象的机会</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line">#import &quot;objc/runtime.h&quot;</span><br><span class="line"></span><br><span class="line">@interface Person: NSObject</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Person</span><br><span class="line"></span><br><span class="line">- (void)foo &#123;</span><br><span class="line">    NSLog(@&quot;Doing foo&quot;);//Person的foo函数</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface ViewController ()</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">    //执行foo函数</span><br><span class="line">    [self performSelector:@selector(foo)];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel &#123;</span><br><span class="line">    return YES;//返回YES，进入下一步转发</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector &#123;</span><br><span class="line">    if (aSelector == @selector(foo)) &#123;</span><br><span class="line">        return [Person new];//返回Person对象，让Person对象接收这个消息</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return [super forwardingTargetForSelector:aSelector];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<h3 id="完整消息转发"><a href="#完整消息转发" class="headerlink" title="完整消息转发"></a>完整消息转发</h3><p>如果在上一步还不能处理未知消息，则唯一能做的就是启用完整的消息转发机制了。 首先它会发送<code>-methodSignatureForSelector:</code>消息获得函数的参数和返回值. 如果<code>-methodSignatureForSelector:</code>返回nil, Runtime则会发出 <code>-doesNotRecognizeSelector:</code>消息,程序这时也就挂掉了.如果返回了一个函数签名, Runtime就会创建一个NSInvocation对象并发送<code>-forwardInvocation:</code>消息给目标对象.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line">#import &quot;objc/runtime.h&quot;</span><br><span class="line"></span><br><span class="line">@interface Person: NSObject</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation Person</span><br><span class="line"></span><br><span class="line">- (void)foo &#123;</span><br><span class="line">    NSLog(@&quot;Doing foo&quot;);//Person的foo函数</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface ViewController ()</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">    //执行foo函数</span><br><span class="line">    [self performSelector:@selector(foo)];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (BOOL)resolveInstanceMethod:(SEL)sel &#123;</span><br><span class="line">    return YES;//返回YES，进入下一步转发</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)forwardingTargetForSelector:(SEL)aSelector &#123;</span><br><span class="line">    return nil;//返回nil，进入下一步转发</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector &#123;</span><br><span class="line">    if ([NSStringFromSelector(aSelector) isEqualToString:@&quot;foo&quot;]) &#123;</span><br><span class="line">        return [NSMethodSignature signatureWithObjCTypes:&quot;v@:&quot;];//签名，进入forwardInvocation</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return [super methodSignatureForSelector:aSelector];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)forwardInvocation:(NSInvocation *)anInvocation &#123;</span><br><span class="line">    SEL sel = anInvocation.selector;</span><br><span class="line"></span><br><span class="line">    Person *p = [Person new];</span><br><span class="line">    if([p respondsToSelector:sel]) &#123;</span><br><span class="line">        [anInvocation invokeWithTarget:p];</span><br><span class="line">    &#125;</span><br><span class="line">    else &#123;</span><br><span class="line">        [self doesNotRecognizeSelector:sel];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>从打印结果来看，我们实现了完整的转发。通过签名，Runtime生成了一个对象anInvocation，发送给了<code>forwardInvocation</code>，我们在<code>forwardInvocation</code>方法里面让Person对象去执行了foo函数.</p>
+<h2 id="Runtime应用"><a href="#Runtime应用" class="headerlink" title="Runtime应用"></a>Runtime应用</h2><p>大致分为以下几种</p>
+<ul>
+<li>关联对象(Objective-C Associated Objects)给分类增加属性</li>
+<li>方法魔法(Method Swizzling)方法添加和替换和KVO实现</li>
+<li>消息转发(热更新)解决Bug(JSPatch)</li>
+<li>实现NSCoding的自动归档和自动解档</li>
+<li>实现字典和模型的自动转换(MJExtension)</li>
+</ul>
+<h3 id="关联对象-Objective-C-Associated-Objects-给分类增加属性"><a href="#关联对象-Objective-C-Associated-Objects-给分类增加属性" class="headerlink" title="关联对象(Objective-C Associated Objects)给分类增加属性"></a>关联对象(Objective-C Associated Objects)给分类增加属性</h3><p>下面实现一个UIView的Category添加自定义属性defaultColor.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;ViewController.h&quot;</span><br><span class="line">#import &quot;objc/runtime.h&quot;</span><br><span class="line"></span><br><span class="line">@interface UIView (DefaultColor)</span><br><span class="line"></span><br><span class="line">@property (nonatomic, strong) UIColor *defaultColor;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation UIView (DefaultColor)</span><br><span class="line"></span><br><span class="line">@dynamic defaultColor;</span><br><span class="line"></span><br><span class="line">static char kDefaultColorKey;</span><br><span class="line"></span><br><span class="line">- (void)setDefaultColor:(UIColor *)defaultColor &#123;</span><br><span class="line">    objc_setAssociatedObject(self, &amp;kDefaultColorKey, defaultColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)defaultColor &#123;</span><br><span class="line">    return objc_getAssociatedObject(self, &amp;kDefaultColorKey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@interface ViewController ()</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">    // Do any additional setup after loading the view, typically from a nib.</span><br><span class="line">    </span><br><span class="line">    UIView *test = [UIView new];</span><br><span class="line">    test.defaultColor = [UIColor blackColor];</span><br><span class="line">    NSLog(@&quot;%@&quot;, test.defaultColor);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure></p>
+<h3 id="方法魔法-Method-Swizzling-方法添加和替换和KVO实现"><a href="#方法魔法-Method-Swizzling-方法添加和替换和KVO实现" class="headerlink" title="方法魔法(Method Swizzling)方法添加和替换和KVO实现"></a>方法魔法(Method Swizzling)方法添加和替换和KVO实现</h3><p>下面实现一个替换ViewController的<code>viewDidLoad</code>方法的例子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">@implementation ViewController</span><br><span class="line"></span><br><span class="line">+ (void)load &#123;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        Class class = [self class];</span><br><span class="line">        SEL originalSelector = @selector(viewDidLoad);</span><br><span class="line">        SEL swizzledSelector = @selector(jkviewDidLoad);</span><br><span class="line">        </span><br><span class="line">        Method originalMethod = class_getInstanceMethod(class,originalSelector);</span><br><span class="line">        Method swizzledMethod = class_getInstanceMethod(class,swizzledSelector);</span><br><span class="line">        </span><br><span class="line">        //judge the method named  swizzledMethod is already existed.</span><br><span class="line">        BOOL didAddMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));</span><br><span class="line">        // if swizzledMethod is already existed.</span><br><span class="line">        if (didAddMethod) &#123;</span><br><span class="line">            class_replaceMethod(class, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            method_exchangeImplementations(originalMethod, swizzledMethod);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)jkviewDidLoad &#123;</span><br><span class="line">    NSLog(@&quot;替换的方法&quot;);</span><br><span class="line">    </span><br><span class="line">    [self jkviewDidLoad];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    NSLog(@&quot;自带的方法&quot;);</span><br><span class="line">    </span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure></p>
+<h3 id="KVO实现"><a href="#KVO实现" class="headerlink" title="KVO实现"></a>KVO实现</h3><p>KVO的实现依赖于 Objective-C 强大的 Runtime，当观察某对象 A 时，KVO 机制动态创建一个对象A当前类的子类，并为这个新的子类重写了被观察属性 keyPath 的 setter 方法。setter 方法随后负责通知观察对象属性的改变状况。</p>
+<p>Apple 使用了 isa-swizzling 来实现 KVO 。当观察对象A时，KVO机制动态创建一个新的名为：NSKVONotifying_A的新类，该类继承自对象A的本类，且 KVO 为 NSKVONotifying_A 重写观察属性的 setter 方法，setter 方法会负责在调用原 setter 方法之前和之后，通知所有观察对象属性值的更改情况。</p>
+<ul>
+<li>NSKVONotifying_A 类剖析<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NSLog(@&quot;self-&gt;isa:%@&quot;,self-&gt;isa);  </span><br><span class="line">NSLog(@&quot;self class:%@&quot;,[self class]);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在建立KVO监听前，打印结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self-&gt;isa:A</span><br><span class="line">self class:A</span><br></pre></td></tr></table></figure></p>
+<p>在建立KVO监听之后，打印结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self-&gt;isa:NSKVONotifying_A</span><br><span class="line">self class:A</span><br></pre></td></tr></table></figure></p>
+<p>在这个过程，被观察对象的 isa 指针从指向原来的 A 类，被KVO 机制修改为指向系统新创建的子类NSKVONotifying_A 类，来实现当前类属性值改变的监听；<br>所以当我们从应用层面上看来，完全没有意识到有新的类出现，这是系统“隐瞒”了对 KVO 的底层实现过程，让我们误以为还是原来的类。但是此时如果我们创建一个新的名为“NSKVONotifying_A”的类，就会发现系统运行到注册 KVO 的那段代码时程序就崩溃，因为系统在注册监听的时候动态创建了名为 NSKVONotifying_A 的中间类，并指向这个中间类了。</p>
+<ul>
+<li>子类setter方法剖析</li>
+</ul>
+<p>KVO 的键值观察通知依赖于 NSObject 的两个方法:willChangeValueForKey:和 didChangeValueForKey: ，在存取数值的前后分别调用 2 个方法：<br>被观察属性发生改变之前，willChangeValueForKey:被调用，通知系统该 keyPath 的属性值即将变更；<br>当改变发生后， didChangeValueForKey: 被调用，通知系统该keyPath 的属性值已经变更；之后， observeValueForKey:ofObject:change:context:也会被调用。且重写观察属性的setter 方法这种继承方式的注入是在运行时而不是编译时实现的。</p>
+<p>KVO 为子类的观察者属性重写调用存取方法的工作原理在代码中相当于：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- (void)setName:(NSString *)newName &#123; </span><br><span class="line">      [self willChangeValueForKey:@&quot;name&quot;];    //KVO 在调用存取方法之前总调用 </span><br><span class="line">      [super setValue:newName forKey:@&quot;name&quot;]; //调用父类的存取方法 </span><br><span class="line">      [self didChangeValueForKey:@&quot;name&quot;];     //KVO 在调用存取方法之后总调用</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="实现NSCoding的自动归档和解挡"><a href="#实现NSCoding的自动归档和解挡" class="headerlink" title="实现NSCoding的自动归档和解挡"></a>实现NSCoding的自动归档和解挡</h3><p>原理描述：用runtime提供的函数遍历Model自身所有属性，并对属性进行encode和decode操作。 核心方法：在Model的基类中重写方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (id)initWithCoder:(NSCoder *)aDecoder &#123;</span><br><span class="line">    if (self = [super init]) &#123;</span><br><span class="line">        unsigned int outCount;</span><br><span class="line">        Ivar * ivars = class_copyIvarList([self class], &amp;outCount);</span><br><span class="line">        for (int i = 0; i &lt; outCount; i ++) &#123;</span><br><span class="line">            Ivar ivar = ivars[i];</span><br><span class="line">            NSString * key = [NSString stringWithUTF8String:ivar_getName(ivar)];</span><br><span class="line">            [self setValue:[aDecoder decodeObjectForKey:key] forKey:key];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)encodeWithCoder:(NSCoder *)aCoder &#123;</span><br><span class="line">    unsigned int outCount;</span><br><span class="line">    Ivar * ivars = class_copyIvarList([self class], &amp;outCount);</span><br><span class="line">    for (int i = 0; i &lt; outCount; i ++) &#123;</span><br><span class="line">        Ivar ivar = ivars[i];</span><br><span class="line">        NSString * key = [NSString stringWithUTF8String:ivar_getName(ivar)];</span><br><span class="line">        [aCoder encodeObject:[self valueForKey:key] forKey:key];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="实现字典和模型的自动转换-MJExtension"><a href="#实现字典和模型的自动转换-MJExtension" class="headerlink" title="实现字典和模型的自动转换(MJExtension)"></a>实现字典和模型的自动转换(MJExtension)</h3><p>原理描述：用runtime提供的函数遍历Model自身所有属性，如果属性在json中有对应的值，则将其赋值。 核心方法：在NSObject的分类中添加方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">- (instancetype)initWithDict:(NSDictionary *)dict &#123;</span><br><span class="line"></span><br><span class="line">    if (self = [self init]) &#123;</span><br><span class="line">        //(1)获取类的属性及属性对应的类型</span><br><span class="line">        NSMutableArray * keys = [NSMutableArray array];</span><br><span class="line">        NSMutableArray * attributes = [NSMutableArray array];</span><br><span class="line">        /*</span><br><span class="line">         * 例子</span><br><span class="line">         * name = value3 attribute = T@&quot;NSString&quot;,C,N,V_value3</span><br><span class="line">         * name = value4 attribute = T^i,N,V_value4</span><br><span class="line">         */</span><br><span class="line">        unsigned int outCount;</span><br><span class="line">        objc_property_t * properties = class_copyPropertyList([self class], &amp;outCount);</span><br><span class="line">        for (int i = 0; i &lt; outCount; i ++) &#123;</span><br><span class="line">            objc_property_t property = properties[i];</span><br><span class="line">            //通过property_getName函数获得属性的名字</span><br><span class="line">            NSString * propertyName = [NSString stringWithCString:property_getName(property) encoding:NSUTF8StringEncoding];</span><br><span class="line">            [keys addObject:propertyName];</span><br><span class="line">            //通过property_getAttributes函数可以获得属性的名字和@encode编码</span><br><span class="line">            NSString * propertyAttribute = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];</span><br><span class="line">            [attributes addObject:propertyAttribute];</span><br><span class="line">        &#125;</span><br><span class="line">        //立即释放properties指向的内存</span><br><span class="line">        free(properties);</span><br><span class="line"></span><br><span class="line">        //(2)根据类型给属性赋值</span><br><span class="line">        for (NSString * key in keys) &#123;</span><br><span class="line">            if ([dict valueForKey:key] == nil) continue;</span><br><span class="line">            [self setValue:[dict valueForKey:key] forKey:key];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/Redux运作流程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1137,7 +1297,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
