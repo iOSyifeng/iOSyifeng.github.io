@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="总体来说,就是store.dispatch(action) -&amp;gt; reducer(state, action) -&amp;gt; store.getState()构成单向数据流">
+<meta name="description" content="此场景是针对于rootVc 是 UITabbarController 的情况, 当我们想在首页隐藏导航栏,首页的下一级显示导航栏的时候.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redux运作流程">
-<meta property="og:url" content="http://yoursite.com/2019/10/14/Redux运作流程/index.html">
+<meta property="og:title" content="记一次导航栏显示与隐藏的Bug解决">
+<meta property="og:url" content="http://yoursite.com/2019/10/24/记一次导航栏显示与隐藏的Bug解决/index.html">
 <meta property="og:site_name" content="逸枫的哲学范儿">
-<meta property="og:description" content="总体来说,就是store.dispatch(action) -&amp;gt; reducer(state, action) -&amp;gt; store.getState()构成单向数据流">
+<meta property="og:description" content="此场景是针对于rootVc 是 UITabbarController 的情况, 当我们想在首页隐藏导航栏,首页的下一级显示导航栏的时候.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-14T06:23:35.791Z">
+<meta property="og:updated_time" content="2019-10-24T07:44:32.746Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redux运作流程">
-<meta name="twitter:description" content="总体来说,就是store.dispatch(action) -&amp;gt; reducer(state, action) -&amp;gt; store.getState()构成单向数据流">
+<meta name="twitter:title" content="记一次导航栏显示与隐藏的Bug解决">
+<meta name="twitter:description" content="此场景是针对于rootVc 是 UITabbarController 的情况, 当我们想在首页隐藏导航栏,首页的下一级显示导航栏的时候.">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/14/Redux运作流程/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/24/记一次导航栏显示与隐藏的Bug解决/">
 
 
 
 
 
-  <title>Redux运作流程 | 逸枫的哲学范儿</title>
+  <title>记一次导航栏显示与隐藏的Bug解决 | 逸枫的哲学范儿</title>
   
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/Redux运作流程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/24/记一次导航栏显示与隐藏的Bug解决/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="逸枫">
@@ -249,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Redux运作流程</h1>
+          <h1 class="post-title" itemprop="name headline">记一次导航栏显示与隐藏的Bug解决</h1>
         
 
         <div class="post-meta">
@@ -261,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T14:14:58+08:00">
-                2019-10-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-24T15:35:13+08:00">
+                2019-10-24
               </time>
             
 
@@ -299,16 +299,13 @@
       
 
       
-        <p>总体来说,就是<code>store.dispatch(action) -&gt; reducer(state, action) -&gt; store.getState()</code><br>构成单向数据流</p>
+        <p>此场景是针对于rootVc 是 UITabbarController 的情况, 当我们想在首页隐藏导航栏,首页的下一级显示导航栏的时候.</p>
 <a id="more"></a>
-<h3 id="1-调用-store-dispatch-action"><a href="#1-调用-store-dispatch-action" class="headerlink" title="1. 调用 store.dispatch(action)"></a>1. 调用 <code>store.dispatch(action)</code></h3><p>Action 是一个包含 { type, payload } 的对象，它描述了“发生了什么”，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; type: &apos;LIKE_ARTICLE&apos;, articleID: 42 &#125;</span><br><span class="line">&#123; type: &apos;FETCH_USER_SUCCESS&apos;, response: &#123; id: 3, name: &apos;Mary&apos; &#125; &#125;</span><br><span class="line">&#123; type: &apos;ADD_TODO&apos;, text: &apos;Read the Redux docs.&apos; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>你可以在任何地方调用 store.dispatch(action)，比如组件内部，Ajax 回调函数里面等等。</p>
-<h3 id="2-Action会触发Store指定的-root-reducer"><a href="#2-Action会触发Store指定的-root-reducer" class="headerlink" title="2. Action会触发Store指定的 root reducer"></a>2. Action会触发Store指定的 root reducer</h3><p>root reducer 会返回一个完整的状态树，State 对象上的各个字段值可以由各自的 reducer 函数处理并返回新的值。</p>
-<ul>
-<li>reducer 函数接受 (state, action) 两个参数</li>
-<li>reducer 函数判断 action.type 然后处理对应的 action.payload 数据来更新并返回一个新的 state</li>
-</ul>
-<h3 id="3-Store-会保存-root-reducer-返回的状态树"><a href="#3-Store-会保存-root-reducer-返回的状态树" class="headerlink" title="3. Store 会保存 root reducer 返回的状态树"></a>3. Store 会保存 root reducer 返回的状态树</h3><p>新的 State 会替代旧的 State，然后所有 store.subscribe(listener) 注册的回调函数会被调用，在回调函数里面可以通过 store.getState() 拿到新的 State。</p>
+<p>我们一般会这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">override func viewWillAppear(_ animated: Bool) &#123;</span><br><span class="line">     super.viewWillAppear(animated)</span><br><span class="line">     self.navigationController?.navigationBar.isHidden = true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">override func viewWillDisappear(_ animated: Bool) &#123;</span><br><span class="line">     super.viewWillDisappear(animated)</span><br><span class="line">     self.navigationController?.navigationBar.isHidden = false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是这样写你在下级界面侧滑返回时,会发现导航栏完完全全的透明了,给使用者一个既不舒适的观感.</p>
+<p>所以你决定采用另一用写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">override func viewWillAppear(_ animated: Bool) &#123;</span><br><span class="line">     super.viewWillAppear(animated)</span><br><span class="line">     self.navigationController?.setNavigationBarHidden(true, animated: true)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">override func viewWillDisappear(_ animated: Bool) &#123;</span><br><span class="line">     super.viewWillDisappear(animated)</span><br><span class="line">     self.navigationController?.setNavigationBarHidden(false, animated: true)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>perfect!  果然又回到了熟悉的感觉,侧滑返回时的效果很好, 但是当你从另一个tab 切换回原来的tab 时会发现首页突然莫名奇妙的跳动了一下, what F!  仔细想一下,可以知道是tabbar 的切换动画与导航栏的动画出现了冲突,所以我们只要禁止tabbar切换时沿用导航动画就好了,所以,最终,你会这样:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">override func viewWillAppear(_ animated: Bool) &#123;</span><br><span class="line">     super.viewWillAppear(animated)</span><br><span class="line">      if self.tabBarController?.selectedIndex == &quot;你当前的tab&quot; &#123;</span><br><span class="line">                self.navigationController?.setNavigationBarHidden(true, animated: true)</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                self.navigationController?.setNavigationBarHidden(true, animated: false)</span><br><span class="line">            &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">override func viewWillDisappear(_ animated: Bool) &#123;</span><br><span class="line">     super.viewWillDisappear(animated)</span><br><span class="line">     self.navigationController?.setNavigationBarHidden(false, animated: true)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相信我,如果你没有用继承的方式去将所有控制器继承到BaseViewController(笔者也不推荐这样)时候, 这种事最优雅的解决方式,没有之一!!1</p>
 
       
     </div>
@@ -333,8 +330,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/14/React之diff算法探究/" rel="next" title="React之diff算法探究">
-                <i class="fa fa-chevron-left"></i> React之diff算法探究
+              <a href="/2019/10/16/Runtime知识点回顾/" rel="next" title="Runtime知识点回顾">
+                <i class="fa fa-chevron-left"></i> Runtime知识点回顾
               </a>
             
           </div>
@@ -342,10 +339,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/16/Runtime知识点回顾/" rel="prev" title="Runtime知识点回顾">
-                Runtime知识点回顾 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -397,17 +390,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -449,22 +433,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-调用-store-dispatch-action"><span class="nav-number">1.</span> <span class="nav-text">1. 调用 store.dispatch(action)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Action会触发Store指定的-root-reducer"><span class="nav-number">2.</span> <span class="nav-text">2. Action会触发Store指定的 root reducer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Store-会保存-root-reducer-返回的状态树"><span class="nav-number">3.</span> <span class="nav-text">3. Store 会保存 root reducer 返回的状态树</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
