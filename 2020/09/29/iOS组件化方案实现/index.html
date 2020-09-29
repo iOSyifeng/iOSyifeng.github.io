@@ -100,7 +100,7 @@
           <!-- Date -->
           <span class="date-time info">On
             <span class="date">2020-09-29</span>
-            <span class="time">10:46:50</span>
+            <span class="time">11:17:43</span>
           </span>
           
         </div>
@@ -108,10 +108,16 @@
         
         <!-- Post Main Content -->
         <div class="post-content">
-          <p>好久没写技术文章了,这段时间也是一直在忙于业务,很少在公司有业余时间搞七七八八,回到家也蛮累的,就没什么产出,对此自己还是蛮惭愧的,😆 今天就来聊聊iOS的组件化吧</p>
+          <p>关于iOS组件化的实现方案</p>
+<a id="more"></a>
+<p>好久没写技术文章了,这段时间也是一直在忙于业务,很少在公司有业余时间搞七七八八,回到家也蛮累的,就没什么产出,对此自己还是蛮惭愧的,😆 今天就来聊聊iOS的组件化吧</p>
 <p>看了很多网上关于组件化的博文,关于理论知识相信大家也都有了大致了解,这里就不一一介绍了,说点实际的东西吧</p>
 <p>我拿我司举例吧, 主要是运用了路由URL + 基于POP的服务注册方案</p>
-<p>首先,我们会有一个XXModuleManager作为一个路由管理组件,它相当于一个中介者,通过解析URL避免了对各个子模块的依赖,我们首先介绍下这个模块都有哪些功能.<br>首先, 我们要先定义一个XXRouterPath结构体,里面会有一个path用来寻址;一个routerImp是协议类型,提供获取vc方法,这个协议也是最重要的一部分,其他子模块要遵守该协议,并实现协议方法,用来做相应模块vc的初始化;一个vcName属性,和一个优先级的枚举属性<br>其次,我们要提供一个注册方法,供子模块的+ load 去进行注册, 在注册方法中,我们通过一个字典来保存,key为寻址path,value为我们之前定义的XXRouterPath结构体. 当外界模块想要进行路由间通信时候,传入url,通过manager解析url,根据key,从字典中拿取对应的XXRouterPath,然后调用其中的routerImp协议方法进找到目标vc,然后通过寻找当前vc的方法进行push或modal就好了</p>
+<p>路由URL:<br>首先,我们会有一个XXModuleRoute作为一个路由管理组件,它相当于一个中介者,通过解析URL避免了对各个子模块的依赖,我们首先介绍下这个模块都有哪些功能.</p>
+<p> 我们要先定义一个XXRouterPath结构体,里面会有一个path用来寻址;一个routerImp是协议类型,提供获取vc方法,这个协议也是最重要的一部分,其他子模块要遵守该协议,并实现协议方法,用来做相应模块vc的初始化;一个vcName属性,和一个优先级的枚举属性<br>其次,我们要提供一个注册方法,供子模块的+ load 去进行注册, 在注册方法中,我们通过一个字典来保存,key为寻址path,value为我们之前定义的XXRouterPath结构体. 当外界模块想要进行路由间通信时候,传入url,通过manager解析url,根据key,从字典中拿取对应的XXRouterPath,然后调用其中的routerImp协议方法进找到目标vc,然后通过寻找当前vc的方法进行push或modal就好了</p>
+<p>基于POP的服务注册方案<br>首先,我们要有一个XXInterfaceManager作为管理者,作用同上</p>
+<p>我们要先定义一个XXInterfaceProtocol,它有点像一个”基协议”,供给个子模块去继承,然后子模块去定义共外界调用的方法<br>管理类有个注册方法,提供protocol 和 AnyClass 参数供外界注册<br>在进行注册的时候,将这个”子协议”注册进去, AnyClass则为自己的实现,<br>管理类提供cache将protocol映射为字符串作为key,然后将实现作为value.</p>
+<p>外界调用方式为: 通过管理类创建相应的interface, 从cache找相应的方法实现,</p>
 
         </div>
       </div>
